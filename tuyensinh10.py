@@ -15,8 +15,11 @@ def entrance_exam():
         scraper = webdriver.Edge(options=myoptions)
         scraper.get(f"{url}{sbd}")
         try:
-            WebDriverWait(scraper, 30).until(presence_of_element_located((By.XPATH, '//*[@id="result"]/div[2]/div[2]/div/div[3]/div/table/tbody/tr/td[8]/strong')))
+            WebDriverWait(scraper, 45).until(presence_of_element_located((By.XPATH, '//*[@id="result"]/div[2]/div[2]/div/div[3]/div/table/tbody/tr/td[8]/strong')))
         except Exception:
+            with open("tracuudiem.csv", "a", newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow((f"{sbd}", "N/A", "N/A", "N/A", "N/A", "N/A"))
             continue
 
         literature = scraper.find_element(By.XPATH, '//*[@id="result"]/div[2]/div[2]/div/div[3]/div/table/tbody/tr/td[4]')
@@ -28,6 +31,8 @@ def entrance_exam():
         with open("tracuudiem.csv", "a", newline='') as f:
             writer = csv.writer(f)
             writer.writerow((f"{sbd}", f"{literature.text}", f"{english.text}", f"{math.text}", f"{major.text}", f"{total.text}"))
+        
+        print(f'SBD: {sbd}')
 
 entrance_exam()
-print('Printing complete!')
+print('Scraping complete!')
